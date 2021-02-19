@@ -36,7 +36,7 @@ if(STATIC)
 endif()
 
 # Manpage package/install
-add_custom_target(man ALL)
+add_custom_target(man)
 add_custom_command(
 	TARGET man
 	COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/man/${PROJECT_NAME}.1" "${CMAKE_CURRENT_BINARY_DIR}"
@@ -48,7 +48,6 @@ set(DOCDIR "${CMAKE_CURRENT_SOURCE_DIR}/share/doc/${PROJECT_NAME}")
 install(TARGETS ${PROJECT_NAME}
 	RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.1.gz" DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/share/man/man1)
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt" DESTINATION ${DOCDIR})
 
 # Uninstallation
