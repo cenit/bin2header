@@ -37,13 +37,13 @@ int convert(const string fin, const string fout, const string hname, const bool 
 
 	/* START Uppercase Name for Header */
 
-	char hname_upper[hname.length() + 2];
+	char * hname_upper = new char[hname.length() + 2];
 	for (int current = 0; current < len(hname_upper); current++) {
 		hname_upper[current] = hname[current];
 		hname_upper[current] = toupper(hname_upper[current]);
 	}
 
-	string name_upper_h = hname_upper;
+	string name_upper_h(hname_upper);
 	name_upper_h.append("_H");
 
 	try {
@@ -90,7 +90,7 @@ int convert(const string fin, const string fout, const string hname, const bool 
 
 			cout << "\rWriting chunk " << to_string(chunk_idx + 1) << " out of " << to_string(chunk_count) << " (Ctrl+C to cancel)";
 
-			char chunk[chunk_size];
+			char * chunk = new char[chunk_size];
 			ifs.seekg(chunk_idx * chunk_size);
 			ifs.read(chunk, chunk_size);
 
