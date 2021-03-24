@@ -18,7 +18,7 @@ string NormalizePath(string path) {
 	string to_replace;
 	string replace_with;
 
-#ifdef __WIN32__
+#ifdef _WIN32
 	to_replace = '/';
 	replace_with = '\\';
 #else
@@ -34,10 +34,10 @@ string NormalizePath(string path) {
 		}
 	}
 
-#ifdef __WIN32__
+#ifdef _WIN32
 	// MSYS2/MinGW paths
 	string first_chars = new_path.substr(0, 3);
-	// FIXME: use tolower from cstio?
+	// FIXME: use tolower from cstdio?
 	transform(first_chars.begin(), first_chars.end(), first_chars.begin(), ::tolower);
 
 	// TODO: support all drive letters
@@ -51,7 +51,7 @@ string NormalizePath(string path) {
 
 
 string JoinPath(string a, string b) {
-#ifdef __WIN32__
+#ifdef _WIN32
 	return a.append("\\").append(b);
 #else
 	return a.append("/").append(b);
@@ -62,10 +62,10 @@ string JoinPath(string a, string b) {
 string GetBaseName(string f) {
 	int split;
 
-#ifdef __WIN32__
-	split = f.find_last_of('\\');
+#ifdef _WIN32
+	split = (int)f.find_last_of('\\');
 #else
-	split = f.find_last_of('/');
+	split = (int)f.find_last_of('/');
 #endif
 	if (split >= 0) {
 		f.erase(0, split + 1);
@@ -78,10 +78,10 @@ string GetBaseName(string f) {
 string GetDirName(string f) {
 	int split;
 
-#ifdef __WIN32__
-	split = f.find_last_of('\\');
+#ifdef _WIN32
+	split = (int)f.find_last_of('\\');
 #else
-	split = f.find_last_of('/');
+	split = (int)f.find_last_of('/');
 #endif
 	if (split < 0) {
 		// working directory

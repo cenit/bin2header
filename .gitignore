@@ -2,6 +2,10 @@
 /.project
 /.pydevproject
 
+# VS/VSCODE project files & folders
+.vs/
+.vscode/
+
 # Output build
 build/
 Makefile

@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 	executable = GetBaseName(NormalizePath(argv[0]));
 
 	// remove extension from executable name
-	const unsigned int ext_idx = executable.find_last_of(".");
+	const size_t ext_idx = executable.find_last_of(".");
 	executable = executable.substr(0, ext_idx);
 
 	cxxopts::Options options(executable, "Convert binary files to C/C++ headers");

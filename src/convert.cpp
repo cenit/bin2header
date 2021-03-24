@@ -56,7 +56,7 @@ int convert(const string fin, const string fout, const string hname, const bool 
 		data_length = ifs.tellg();
 		ifs.seekg(0, ifstream::beg);
 
-		unsigned long long chunk_count = ceil((double) data_length / chunk_size);
+		unsigned long long chunk_count = long long(ceil((double) data_length / chunk_size));
 
 		cout << "File size: " << to_string(data_length) << " bytes" << endl;
 		cout << "Chunk size: " << to_string(chunk_size) << " bytes" << endl;

@@ -1,65 +1,37 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(bin2header
-	VERSION 0.2.0
-	LANGUAGES CXX
+  VERSION 0.2.0
+  LANGUAGES CXX
 )
-set(PROJECT_PY_VERSION 0.1.2)
-
-message("Configuring ${PROJECT_NAME} ${PROJECT_VERSION}")
-
 set(CMAKE_CXX_STANDARD 11)
 
 if(NOT CMAKE_BUILD_TYPE)
-	# set build to release
-	set(CMAKE_BUILD_TYPE "Release")
+  set(CMAKE_BUILD_TYPE "Release")
 endif()
-# strip binary for release builds
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 if(WIN32)
-	set(EMBED_ICON OFF CACHE BOOL "Embeds icon resource into executable on Win32")
+  set(EMBED_ICON OFF CACHE BOOL "Embeds icon resource into executable on Win32")
 endif()
 
-# retrieve source files
-file(GLOB FILES_C "${CMAKE_SOURCE_DIR}/src/*.cpp")
+file(GLOB PROJECT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
 if(WIN32 AND EMBED_ICON)
-	set(FILES_C ${FILES_C} "${CMAKE_SOURCE_DIR}/icon_resource.rc")
-endif()
-include_directories("${CMAKE_SOURCE_DIR}/src/include")
-add_executable(${PROJECT_NAME} ${FILES_C})
-
-set(STATIC OFF CACHE BOOL "Link statically to libgcc & libstdc++")
-if(STATIC)
-	# static link to libgcc & libstdc++
-	set(CMAKE_CXX_FLAGS "-static")
+  list(APPEND PROJECT_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/icon_resource.rc")
 endif()
 
-# Manpage package/install
-add_custom_target(man)
-add_custom_command(
-	TARGET man
-	COMMAND cp "${CMAKE_CURRENT_SOURCE_DIR}/man/${PROJECT_NAME}.1" "${CMAKE_CURRENT_BINARY_DIR}"
-	COMMAND gzip -f9 "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.1"
-)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_FILES})
+target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/include")
 
 set(DOCDIR "${CMAKE_CURRENT_SOURCE_DIR}/share/doc/${PROJECT_NAME}")
 
 install(TARGETS ${PROJECT_NAME}
-	RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin
+  RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt" DESTINATION ${DOCDIR})
 
-# Uninstallation
-add_custom_target(uninstall)
-add_custom_command(
-	TARGET uninstall
-	COMMAND rm -vf "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}"
-	COMMAND rm -vf "${CMAKE_INSTALL_PREFIX}/share/man/man1/${PROJECT_NAME}.1.gz"
-	COMMAND rm -vf "${CMAKE_INSTALL_PREFIX}/${DOCDIR}/LICENSE.txt"
-)
-
 set_property(
-	DIRECTORY
-	PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${PROJECT_NAME}.1.gz
+  DIRECTORY
+  PROPERTY ADDITIONAL_CLEAN_FILES ${PROJECT_NAME}.1.gz
 )
