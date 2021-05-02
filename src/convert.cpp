@@ -37,8 +37,8 @@ int convert(const string fin, const string fout, const string hname, const bool 
 
 	/* START Uppercase Name for Header */
 
-	char * hname_upper = new char[hname.length() + 2];
-	for (int current = 0; current < len(hname_upper); current++) {
+	char * hname_upper = new char[hname.length() + 1];
+	for (int current = 0; current < (hname.length() + 1); current++) {
 		hname_upper[current] = hname[current];
 		hname_upper[current] = toupper(hname_upper[current]);
 	}
